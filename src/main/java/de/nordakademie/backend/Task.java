@@ -5,8 +5,8 @@ import java.time.LocalDate;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 public class Task {
-    private final String name;
-    private final LocalDate dueDate;
+    protected String name;
+    protected LocalDate dueDate;
 
     public Task(String name, LocalDate dueDate) {
         this.name = name;
