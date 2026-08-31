@@ -1,17 +1,19 @@
 package de.nordakademie;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import de.nordakademie.backend.Task;
+import de.nordakademie.backend.TodoList;
+import de.nordakademie.ui.UI;
+
+import javax.swing.*;
+import java.time.LocalDate;
+
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        TodoList todoList = new TodoList();
+        todoList.addTask(new Task("Buy groceries", LocalDate.now().plusDays(1)));
+        todoList.addTask(new Task("Finish homework", LocalDate.now().plusDays(3)));
+        todoList.addTask(new Task("Call dentist", LocalDate.now().plusDays(7)));
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
-        }
+        SwingUtilities.invokeLater(() -> new UI(todoList).show());
     }
 }

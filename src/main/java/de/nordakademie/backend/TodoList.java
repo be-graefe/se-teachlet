@@ -18,6 +18,10 @@ public class TodoList {
         tasks.remove(task);
     }
 
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
     public long calculateAllDaysUntilDue() {
         long totalDays = 0;
         for (Task task : tasks) {
