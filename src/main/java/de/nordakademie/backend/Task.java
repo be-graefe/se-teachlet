@@ -6,32 +6,33 @@ import static java.time.temporal.ChronoUnit.DAYS;
 
 public class Task {
     private final String name;
-    private final LocalDate dueDate;
-    private boolean checked;
+    private final LocalDate faelligkeitsdatum;
+    private boolean erledigt;
 
     public Task(String name, LocalDate dueDate) {
         this.name = name;
-        this.dueDate = dueDate;
+        this.faelligkeitsdatum = dueDate;
     }
 
-    public long calculateDaysUntilDue() {
+    public long berechneTageBisFaelligkeitsdatum() {
         LocalDate today = LocalDate.now();
-        return DAYS.between(today, dueDate);
+        return DAYS.between(today, faelligkeitsdatum);
     }
 
     public String getName() {
         return name;
     }
 
-    public LocalDate getDueDate() {
-        return dueDate;
+    public LocalDate getFaelligkeitsdatum() {
+        return faelligkeitsdatum;
     }
 
-    public boolean isChecked() {
-        return checked;
+    public boolean isErledigt() {
+        return erledigt;
     }
 
-    public void setChecked(boolean checked) {
-        this.checked = checked;
+    public void setErledigt(boolean erledigt) {
+        this.erledigt = erledigt;
     }
+
 }

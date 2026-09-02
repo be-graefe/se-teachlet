@@ -3,11 +3,20 @@ package de.nordakademie.backend;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * TodoList - Component des Kompositum Designpatterns
+ */
 public class TodoList {
     private final List<Task> tasks;
+    private final String name;
 
-    public TodoList() {
+    public TodoList(String name) {
         this.tasks = new ArrayList<>();
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void addTask(Task task) {
@@ -22,11 +31,8 @@ public class TodoList {
         return tasks;
     }
 
-    public long calculateAllDaysUntilDue() {
-        long totalDays = 0;
-        for (Task task : tasks) {
-            totalDays += task.calculateDaysUntilDue();
-        }
-        return totalDays;
+    public boolean isProjekt() {
+        return true;
     }
+
 }

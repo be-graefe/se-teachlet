@@ -9,10 +9,10 @@ import java.time.LocalDate;
 
 public class Main {
     public static void main(String[] args) {
-        TodoList todoList = new TodoList();
-        todoList.addTask(new Task("Buy groceries", LocalDate.now().plusDays(1)));
-        todoList.addTask(new Task("Finish homework", LocalDate.now().plusDays(3)));
-        todoList.addTask(new Task("Call dentist", LocalDate.now().plusDays(7)));
+        TodoList todoList = new TodoList("Haushalt");
+        todoList.addTask(new Task("Lebensmittel einkaufen", LocalDate.now().plusDays(1)));
+        todoList.addTask(new Task("Hausaufgaben beenden", LocalDate.now().plusDays(3)));
+        todoList.addTask(new Task("Zahnarztermin vereinbaren", LocalDate.now().plusDays(7)));
 
         SwingUtilities.invokeLater(() -> new UI(todoList).show());
     }

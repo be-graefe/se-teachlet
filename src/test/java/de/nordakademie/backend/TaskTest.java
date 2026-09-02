@@ -17,8 +17,8 @@ class TaskTest {
         Task task = new Task("Write report", dueDate);
 
         assertEquals("Write report", task.getName());
-        assertEquals(dueDate, task.getDueDate());
-        assertFalse(task.isChecked());
+        assertEquals(dueDate, task.getFaelligkeitsdatum());
+        assertFalse(task.isErledigt());
     }
 
     @Test
@@ -27,15 +27,15 @@ class TaskTest {
 
         Task task = new Task("Prepare lecture", dueDate);
 
-        assertEquals(4, task.calculateDaysUntilDue());
+        assertEquals(4, task.berechneTageBisFaelligkeitsdatum());
     }
 
     @Test
     void taskShouldToggleCheckedState() {
         Task task = new Task("Review code", LocalDate.now().plusDays(1));
 
-        task.setChecked(true);
+        task.setErledigt(true);
 
-        assertTrue(task.isChecked());
+        assertTrue(task.isErledigt());
     }
 }

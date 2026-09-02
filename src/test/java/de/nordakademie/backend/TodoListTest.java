@@ -12,7 +12,7 @@ class TodoListTest {
 
     @Test
     void todoListShouldAddTasks() {
-        TodoList todoList = new TodoList();
+        TodoList todoList = new TodoList("Test");
         Task task = new Task("Buy milk", LocalDate.now().plusDays(2));
 
         todoList.addTask(task);
@@ -23,7 +23,7 @@ class TodoListTest {
 
     @Test
     void todoListShouldRemoveTasks() {
-        TodoList todoList = new TodoList();
+        TodoList todoList = new TodoList("Test");
         Task task = new Task("Call mom", LocalDate.now().plusDays(5));
         todoList.addTask(task);
 
@@ -33,19 +33,22 @@ class TodoListTest {
     }
 
     @Test
-    void todoListShouldSumDaysUntilDue() {
-        TodoList todoList = new TodoList();
-        todoList.addTask(new Task("Task A", LocalDate.now().plusDays(2)));
-        todoList.addTask(new Task("Task B", LocalDate.now().plusDays(5)));
+    void todoListShouldStoreName() {
+        TodoList todoList = new TodoList("Haushalt");
 
-        long total = todoList.calculateAllDaysUntilDue();
+        assertEquals("Haushalt", todoList.getName());
+    }
 
-        assertEquals(7, total);
+    @Test
+    void todoListShouldBeProjekt() {
+        TodoList todoList = new TodoList("Test");
+
+        assertTrue(todoList.isProjekt());
     }
 
     @Test
     void todoListShouldKeepAddedTasksInOrderOfInsertion() {
-        TodoList todoList = new TodoList();
+        TodoList todoList = new TodoList("Test");
         Task first = new Task("First", LocalDate.now().plusDays(1));
         Task second = new Task("Second", LocalDate.now().plusDays(2));
 

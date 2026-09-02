@@ -11,7 +11,6 @@ import java.awt.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Comparator;
 import java.util.List;
 
 public class UI {
@@ -24,11 +23,11 @@ public class UI {
     }
 
     public void show() {
-        JFrame frame = new JFrame("Todo List");
+        JFrame frame = new JFrame("Aufgabenliste");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
 
-        TaskTableModel model = new TaskTableModel(todoList.getTasks());
+        TaskTableModel model = new TaskTableModel(todoList);
         JTable table = new JTable(model);
         table.setFillsViewportHeight(true);
 
@@ -61,9 +60,9 @@ public class UI {
     }
 
     private JPanel createButtonPanel(JFrame frame, JTable table, TaskTableModel model, Font scaledFont) {
-        JButton addButton = createButton("Add", scaledFont);
-        JButton removeButton = createButton("Remove selected", scaledFont);
-        JButton createProjectButton = createButton("Create project", scaledFont);
+        JButton addButton = createButton("Aufgabe hinzufügen", scaledFont);
+        JButton removeButton = createButton("Ausgewähltes löschen", scaledFont);
+        JButton createProjectButton = createButton("Projekt hinzufügen", scaledFont);
 
         addButton.addActionListener(e -> handleAddTask(frame, model, scaledFont));
         removeButton.addActionListener(e -> handleRemoveSelectedTask(table, model));
@@ -91,7 +90,7 @@ public class UI {
             return null;
         }
 
-        String dueDateInput = showScaledInputDialog(frame, title, "Due date (yyyy-MM-dd):", scaledFont);
+        String dueDateInput = showScaledInputDialog(frame, title, "Fälligkeitsdatum (YYYY-MM-DD):", scaledFont);
         if (dueDateInput == null || dueDateInput.isBlank()) {
             return null;
         }
@@ -100,22 +99,21 @@ public class UI {
             LocalDate dueDate = LocalDate.parse(dueDateInput.trim());
             return new ItemInput(name.trim(), dueDate);
         } catch (DateTimeParseException ex) {
-            showScaledErrorDialog(frame, "Invalid date. Please use yyyy-MM-dd.", scaledFont);
+            showScaledErrorDialog(frame, "Invalides Datum. Bitte benutze YYYY-MM-YY.", scaledFont);
             return null;
         }
     }
 
     private void handleAddTask(JFrame frame, TaskTableModel model, Font scaledFont) {
-        ItemInput input = promptItemInput(frame, scaledFont, "Add task");
+        ItemInput input = promptItemInput(frame, scaledFont, "Aufgabe hinzufügen");
         if (input == null) return;
 
         todoList.addTask(new Task(input.name(), input.dueDate()));
-        model.sortByDueDate();
-        model.fireTableDataChanged();
+        model.refresh();
     }
 
     private void handleCreateProject(JFrame frame, TaskTableModel model, Font scaledFont) {
-        // TODO: Implement project creation logic here
+        // TODO: Hier Logik für Projekte hinzufügen
     }
 
     private void handleRemoveSelectedTask(JTable table, TaskTableModel model) {
@@ -125,9 +123,13 @@ public class UI {
         }
 
         int modelRow = table.convertRowIndexToModel(selectedRow);
-        Task task = model.getTaskAt(modelRow);
-        todoList.removeTask(task);
-        model.fireTableDataChanged();
+        Row row = model.getRowAt(modelRow);
+        if (!row.isTask()) {
+            return;
+        }
+
+        todoList.removeTask(row.asTask());
+        model.refresh();
     }
 
     private String showScaledInputDialog(JFrame parent, String title, String labelText, Font font) {
@@ -161,27 +163,56 @@ public class UI {
         JOptionPane.showMessageDialog(parent, label, "Input error", JOptionPane.ERROR_MESSAGE);
     }
 
+    private record Row(Object item, int depth) {
+        boolean isTodoList() {
+            return item instanceof TodoList;
+        }
+
+        boolean isTask() {
+            return item instanceof Task;
+        }
+
+        TodoList asTodoList() {
+            return (TodoList) item;
+        }
+
+        Task asTask() {
+            return (Task) item;
+        }
+    }
+
     private static class TaskTableModel extends AbstractTableModel {
-        private final String[] columns = {"Done", "Task", "Due Date"};
-        private final List<Task> tasks;
+        private final String[] columns = {"Erledigt", "Aufgabe", "Fälligkeitsdatum"};
+        private final TodoList todoList;
         private final DateTimeFormatter dateFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
+        private List<Row> rows;
 
-        TaskTableModel(List<Task> tasks) {
-            this.tasks = tasks;
-            sortByDueDate();
+        TaskTableModel(TodoList todoList) {
+            this.todoList = todoList;
+            this.rows = buildRows(todoList, 0);
         }
 
-        void sortByDueDate() {
-            tasks.sort(Comparator.comparing(Task::getDueDate));
+        private static List<Row> buildRows(TodoList todoList, int depth) {
+            List<Row> result = new java.util.ArrayList<>();
+            result.add(new Row(todoList, depth));
+            for (Task task : todoList.getTasks()) {
+                result.add(new Row(task, depth + 1));
+            }
+            return result;
         }
 
-        Task getTaskAt(int rowIndex) {
-            return tasks.get(rowIndex);
+        void refresh() {
+            rows = buildRows(todoList, 0);
+            fireTableDataChanged();
+        }
+
+        Row getRowAt(int rowIndex) {
+            return rows.get(rowIndex);
         }
 
         @Override
         public int getRowCount() {
-            return tasks.size();
+            return rows.size();
         }
 
         @Override
@@ -205,30 +236,41 @@ public class UI {
 
         @Override
         public boolean isCellEditable(int rowIndex, int columnIndex) {
-            return columnIndex == 0;
+            return columnIndex == 0 && rows.get(rowIndex).isTask();
         }
 
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
-            Task task = tasks.get(rowIndex);
+            Row row = rows.get(rowIndex);
+            if (row.isTodoList()) {
+                return switch (columnIndex) {
+                    case 1 -> row.asTodoList().getName();
+                    default -> null;
+                };
+            }
+
+            Task task = row.asTask();
             return switch (columnIndex) {
-                case 0 -> task.isChecked();
+                case 0 -> task.isErledigt();
                 case 1 -> task.getName();
-                case 2 -> task.getDueDate().format(dateFormatter);
+                case 2 -> task.getFaelligkeitsdatum().format(dateFormatter);
                 default -> null;
             };
         }
 
         @Override
         public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-            if (columnIndex == 0 && aValue instanceof Boolean checked) {
-                tasks.get(rowIndex).setChecked(checked);
+            Row row = rows.get(rowIndex);
+            if (columnIndex == 0 && row.isTask() && aValue instanceof Boolean checked) {
+                row.asTask().setErledigt(checked);
                 fireTableCellUpdated(rowIndex, columnIndex);
             }
         }
     }
 
     private static class DueDateColorTextRenderer extends DefaultTableCellRenderer {
+        private static final int INDENT_PER_LEVEL = (int) Math.round(16 * SCALE);
+
         private final TaskTableModel model;
 
         DueDateColorTextRenderer(TaskTableModel model) {
@@ -240,39 +282,62 @@ public class UI {
                 JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column
         ) {
             Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            applyRowColor(component, table, model.getTaskAt(table.convertRowIndexToModel(row)), isSelected);
+            Row modelRow = model.getRowAt(table.convertRowIndexToModel(row));
+            applyRowColor(component, table, modelRow, isSelected);
+
+            if (component instanceof JLabel label) {
+                int indent = column == 1 ? modelRow.depth() * INDENT_PER_LEVEL : 0;
+                label.setBorder(BorderFactory.createEmptyBorder(0, indent, 0, 0));
+                label.setFont(modelRow.isTodoList()
+                        ? label.getFont().deriveFont(Font.BOLD)
+                        : label.getFont().deriveFont(Font.PLAIN));
+            }
             return component;
         }
     }
 
     private static class DueDateColorCheckBoxRenderer extends JCheckBox implements TableCellRenderer {
         private final TaskTableModel model;
+        private final JLabel blankCell = new JLabel();
 
         DueDateColorCheckBoxRenderer(TaskTableModel model) {
             this.model = model;
             setHorizontalAlignment(CENTER);
             setOpaque(true);
+            blankCell.setOpaque(true);
         }
 
         @Override
         public Component getTableCellRendererComponent(
                 JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column
         ) {
+            Row modelRow = model.getRowAt(table.convertRowIndexToModel(row));
+            if (modelRow.isTodoList()) {
+                applyRowColor(blankCell, table, modelRow, isSelected);
+                return blankCell;
+            }
+
             setSelected(Boolean.TRUE.equals(value));
-            applyRowColor(this, table, model.getTaskAt(table.convertRowIndexToModel(row)), isSelected);
+            applyRowColor(this, table, modelRow, isSelected);
             return this;
         }
     }
 
-    private static void applyRowColor(Component component, JTable table, Task task, boolean isSelected) {
+    private static void applyRowColor(Component component, JTable table, Row row, boolean isSelected) {
         if (isSelected) {
             component.setBackground(table.getSelectionBackground());
             component.setForeground(table.getSelectionForeground());
             return;
         }
 
-        long daysUntilDue = task.calculateDaysUntilDue();
-        if (daysUntilDue < 0) {
+        if (row.isTodoList()) {
+            component.setBackground(new Color(230, 230, 230));
+            component.setForeground(Color.BLACK);
+            return;
+        }
+
+        long daysUntilDue = row.asTask().berechneTageBisFaelligkeitsdatum();
+        if (daysUntilDue <= 0) {
             component.setBackground(new Color(255, 199, 206));
         } else if (daysUntilDue == 1) {
             component.setBackground(new Color(255, 242, 204));
