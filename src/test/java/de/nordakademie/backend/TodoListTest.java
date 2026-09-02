@@ -15,7 +15,7 @@ class TodoListTest {
         TodoList todoList = new TodoList("Test");
         Task task = new Task("Buy milk", LocalDate.now().plusDays(2));
 
-        todoList.addTask(task);
+        todoList.addChild(task);
 
         assertEquals(1, todoList.getChildren().size());
         assertTrue(todoList.getChildren().contains(task));
@@ -25,9 +25,9 @@ class TodoListTest {
     void todoListShouldRemoveTasks() {
         TodoList todoList = new TodoList("Test");
         Task task = new Task("Call mom", LocalDate.now().plusDays(5));
-        todoList.addTask(task);
+        todoList.addChild(task);
 
-        todoList.removeTask(task);
+        todoList.removeChild(task);
 
         assertTrue(todoList.getChildren().isEmpty());
     }
@@ -43,7 +43,7 @@ class TodoListTest {
     void todoListShouldBeProjekt() {
         TodoList todoList = new TodoList("Test");
 
-        assertTrue(todoList.isProjekt());
+        assertTrue(todoList.isTodoListe());
     }
 
     @Test
@@ -52,8 +52,8 @@ class TodoListTest {
         Task first = new Task("First", LocalDate.now().plusDays(1));
         Task second = new Task("Second", LocalDate.now().plusDays(2));
 
-        todoList.addTask(first);
-        todoList.addTask(second);
+        todoList.addChild(first);
+        todoList.addChild(second);
 
         assertEquals(first, todoList.getChildren().get(0));
         assertEquals(second, todoList.getChildren().get(1));

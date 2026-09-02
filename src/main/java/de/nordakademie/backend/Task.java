@@ -41,4 +41,9 @@ public class Task implements TodoListComponent {
         return List.of();
     }
 
+    @Override
+    public boolean isTodoListe() {
+        return false;
+    }
+
 }

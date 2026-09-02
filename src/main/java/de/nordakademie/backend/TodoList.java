@@ -19,15 +19,16 @@ public class TodoList implements TodoListComponent {
         return name;
     }
 
-    public void addTask(TodoListComponent child) {
+    public void addChild(TodoListComponent child) {
         children.add(child);
     }
 
-    public void removeTask(TodoListComponent child) {
+    public void removeChild(TodoListComponent child) {
         children.remove(child);
     }
 
-    public boolean isProjekt() {
+    @Override
+    public boolean isTodoListe() {
         return true;
     }
 

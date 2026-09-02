@@ -109,7 +109,7 @@ public class UI {
         ItemInput input = promptItemInput(frame, scaledFont, "Aufgabe hinzufügen");
         if (input == null) return;
 
-        todoList.addTask(new Task(input.name(), input.dueDate()));
+        todoList.addChild(new Task(input.name(), input.dueDate()));
         model.refresh();
     }
 
@@ -123,13 +123,10 @@ public class UI {
             return;
         }
 
-        int modelRow = table.convertRowIndexToModel(selectedRow);
-        Row row = model.getRowAt(modelRow);
-        if (!row.isTask()) {
-            return;
-        }
+        Row row = model.getRowAt(table.convertRowIndexToModel(selectedRow));
+        if (row.parent() == null) return; // Wurzel-Liste kann nicht gelöscht werden
 
-        todoList.removeTask(row.asTask());
+        ((TodoList) row.parent()).removeChild(row.item());
         model.refresh();
     }
 
@@ -164,13 +161,10 @@ public class UI {
         JOptionPane.showMessageDialog(parent, label, "Input error", JOptionPane.ERROR_MESSAGE);
     }
 
-    private record Row(Object item, int depth) {
+    private record Row(TodoListComponent item, TodoListComponent parent, int depth) {
+                
         boolean isTodoList() {
-            return item instanceof TodoList;
-        }
-
-        boolean isTask() {
-            return item instanceof Task;
+            return item.isTodoListe();
         }
 
         TodoList asTodoList() {
@@ -190,20 +184,20 @@ public class UI {
 
         TaskTableModel(TodoList todoList) {
             this.todoList = todoList;
-            this.rows = buildRows(todoList, 0);
+            this.rows = buildRows(todoList, null, 0);
         }
 
-        private static List<Row> buildRows(TodoListComponent component, int depth) {
+        private static List<Row> buildRows(TodoListComponent component, TodoListComponent parent, int depth) {
             List<Row> result = new java.util.ArrayList<>();
-            result.add(new Row(component, depth));
+            result.add(new Row(component, parent, depth));
             for (TodoListComponent child : component.getChildren()) {
-                result.addAll(buildRows(child, depth + 1));
+                result.addAll(buildRows(child, component, depth + 1));
             }
             return result;
         }
 
         void refresh() {
-            rows = buildRows(todoList, 0);
+            rows = buildRows(todoList, null, 0);
             fireTableDataChanged();
         }
 
@@ -237,7 +231,7 @@ public class UI {
 
         @Override
         public boolean isCellEditable(int rowIndex, int columnIndex) {
-            return columnIndex == 0 && rows.get(rowIndex).isTask();
+            return columnIndex == 0 && !rows.get(rowIndex).isTodoList();
         }
 
         @Override
@@ -262,7 +256,7 @@ public class UI {
         @Override
         public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
             Row row = rows.get(rowIndex);
-            if (columnIndex == 0 && row.isTask() && aValue instanceof Boolean checked) {
+            if (columnIndex == 0 && !row.isTodoList() && aValue instanceof Boolean checked) {
                 row.asTask().setErledigt(checked);
                 fireTableCellUpdated(rowIndex, columnIndex);
             }
