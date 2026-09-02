@@ -2,6 +2,7 @@ package de.nordakademie.ui;
 
 import de.nordakademie.backend.Task;
 import de.nordakademie.backend.TodoList;
+import de.nordakademie.backend.TodoListComponent;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -192,11 +193,11 @@ public class UI {
             this.rows = buildRows(todoList, 0);
         }
 
-        private static List<Row> buildRows(TodoList todoList, int depth) {
+        private static List<Row> buildRows(TodoListComponent component, int depth) {
             List<Row> result = new java.util.ArrayList<>();
-            result.add(new Row(todoList, depth));
-            for (Task task : todoList.getTasks()) {
-                result.add(new Row(task, depth + 1));
+            result.add(new Row(component, depth));
+            for (TodoListComponent child : component.getChildren()) {
+                result.addAll(buildRows(child, depth + 1));
             }
             return result;
         }

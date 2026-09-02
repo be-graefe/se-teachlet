@@ -17,8 +17,8 @@ class TodoListTest {
 
         todoList.addTask(task);
 
-        assertEquals(1, todoList.getTasks().size());
-        assertTrue(todoList.getTasks().contains(task));
+        assertEquals(1, todoList.getChildren().size());
+        assertTrue(todoList.getChildren().contains(task));
     }
 
     @Test
@@ -29,7 +29,7 @@ class TodoListTest {
 
         todoList.removeTask(task);
 
-        assertTrue(todoList.getTasks().isEmpty());
+        assertTrue(todoList.getChildren().isEmpty());
     }
 
     @Test
@@ -55,8 +55,8 @@ class TodoListTest {
         todoList.addTask(first);
         todoList.addTask(second);
 
-        assertEquals(first, todoList.getTasks().get(0));
-        assertEquals(second, todoList.getTasks().get(1));
-        assertFalse(todoList.getTasks().isEmpty());
+        assertEquals(first, todoList.getChildren().get(0));
+        assertEquals(second, todoList.getChildren().get(1));
+        assertFalse(todoList.getChildren().isEmpty());
     }
 }

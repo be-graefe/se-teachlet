@@ -1,10 +1,11 @@
 package de.nordakademie.backend;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
-public class Task {
+public class Task implements TodoListComponent {
     private final String name;
     private final LocalDate faelligkeitsdatum;
     private boolean erledigt;
@@ -33,6 +34,11 @@ public class Task {
 
     public void setErledigt(boolean erledigt) {
         this.erledigt = erledigt;
+    }
+
+    @Override
+    public List<TodoListComponent> getChildren() {
+        return List.of();
     }
 
 }

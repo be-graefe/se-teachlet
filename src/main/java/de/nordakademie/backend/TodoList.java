@@ -6,12 +6,12 @@ import java.util.List;
 /**
  * TodoList - Component des Kompositum Designpatterns
  */
-public class TodoList {
-    private final List<Task> tasks;
+public class TodoList implements TodoListComponent {
+    private final List<TodoListComponent> children;
     private final String name;
 
     public TodoList(String name) {
-        this.tasks = new ArrayList<>();
+        this.children = new ArrayList<>();
         this.name = name;
     }
 
@@ -19,20 +19,21 @@ public class TodoList {
         return name;
     }
 
-    public void addTask(Task task) {
-        tasks.add(task);
+    public void addTask(TodoListComponent child) {
+        children.add(child);
     }
 
-    public void removeTask(Task task) {
-        tasks.remove(task);
-    }
-
-    public List<Task> getTasks() {
-        return tasks;
+    public void removeTask(TodoListComponent child) {
+        children.remove(child);
     }
 
     public boolean isProjekt() {
         return true;
+    }
+
+    @Override
+    public List<TodoListComponent> getChildren() {
+        return children;
     }
 
 }
