@@ -1,15 +1,17 @@
 package de.nordakademie.ui;
 
+import de.nordakademie.backend.TodoListComponent;
+
 import java.time.LocalDate;
 import java.util.function.Consumer;
 
 /**
  * Eine einzelne Zeile der Anzeige.
  *
- * <p>Die Zeile ist bewusst unabhängig von den Backend-Klassen: sie enthält nur die
- * anzuzeigenden Werte und - falls erlaubt - die Aktionen "abhaken" und "löschen".
- * Tabelle, Spalten und Renderer arbeiten ausschließlich mit dieser Zeile und müssen
- * deshalb nicht angepasst werden, wenn sich die Struktur im Backend ändert.</p>
+ * <p>Die Zeile kennt keine konkrete Backend-Klasse: sie enthält nur die anzuzeigenden
+ * Werte und - falls erlaubt - die Aktionen "abhaken", "löschen" und das Ziel für neue
+ * Einträge. Tabelle, Spalten und Renderer arbeiten ausschließlich mit dieser Zeile und
+ * müssen deshalb nicht angepasst werden, wenn sich die Struktur im Backend ändert.</p>
  *
  * <p>Erweiterung um ein weiteres Feld (z. B. Bearbeitungszeit): hier eine Komponente
  * ergänzen, sie in {@link RowBuilder} füllen und in {@link Column} als Spalte anzeigen.</p>
@@ -21,6 +23,8 @@ import java.util.function.Consumer;
  * @param done      Erledigt-Status, {@code null} wenn die Zeile keinen Status hat
  * @param onDone    Aktion zum Abhaken, {@code null} wenn die Zeile nicht abhakbar ist
  * @param onDelete  Aktion zum Löschen, {@code null} wenn die Zeile nicht löschbar ist
+ * @param target    Liste, in die ein neuer Eintrag gehört, wenn diese Zeile ausgewählt ist:
+ *                  bei einem Projekt das Projekt selbst, bei einer Aufgabe deren Liste
  */
 public record Row(
         int depth,
@@ -29,24 +33,20 @@ public record Row(
         LocalDate dueDate,
         Boolean done,
         Consumer<Boolean> onDone,
-        Runnable onDelete
+        Runnable onDelete,
+        TodoListComponent target
 ) {
 
-    /** Kopfzeile einer Liste / eines Projekts ohne eigene Aktionen. */
-    public static Row forList(int depth, String name) {
-        return forList(depth, name, null, null, null, null);
-    }
-
-    /** Kopfzeile einer Liste / eines Projekts mit Datum und Aktionen. */
+    /** Kopfzeile einer Liste / eines Projekts. */
     public static Row forList(int depth, String name, LocalDate dueDate, Boolean done,
-                              Consumer<Boolean> onDone, Runnable onDelete) {
-        return new Row(depth, true, name, dueDate, done, onDone, onDelete);
+                              Consumer<Boolean> onDone, Runnable onDelete, TodoListComponent target) {
+        return new Row(depth, true, name, dueDate, done, onDone, onDelete, target);
     }
 
     /** Zeile einer einzelnen Aufgabe. */
     public static Row forTask(int depth, String name, LocalDate dueDate, boolean done,
-                              Consumer<Boolean> onDone, Runnable onDelete) {
-        return new Row(depth, false, name, dueDate, done, onDone, onDelete);
+                              Consumer<Boolean> onDone, Runnable onDelete, TodoListComponent target) {
+        return new Row(depth, false, name, dueDate, done, onDone, onDelete, target);
     }
 
     public boolean canToggle() {
@@ -55,6 +55,10 @@ public record Row(
 
     public boolean canDelete() {
         return onDelete != null;
+    }
+
+    public boolean canAdd() {
+        return target != null;
     }
 
     public void toggle(boolean value) {

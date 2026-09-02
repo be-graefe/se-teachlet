@@ -2,6 +2,7 @@ package de.nordakademie.ui;
 
 import de.nordakademie.backend.Task;
 import de.nordakademie.backend.TodoList;
+import de.nordakademie.backend.TodoListComponent;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
@@ -9,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -24,10 +26,7 @@ import java.util.Optional;
 /**
  * Fenster der Anwendung: eine Tabelle mit allen Zeilen und darunter die Schaltflächen.
  *
- * <p>Die Anzeige selbst läuft vollständig über {@link Row} und {@link RowBuilder}; das
- * Fenster kennt das Backend nur, um neue Aufgaben anzulegen. Für eine Erweiterung
- * (z. B. Kompositum oder eine weitere Spalte) muss diese Klasse in der Regel nicht
- * angefasst werden.</p>
+ * @author bgraefe, fproesch
  */
 public class UI {
 
@@ -106,14 +105,33 @@ public class UI {
     }
 
     private void addTask() {
-        TaskDialog.show(frame, "Aufgabe hinzufügen").ifPresent(input -> {
-            todoList.addTask(new Task(input.name(), input.dueDate()));
-            model.refresh();
-        });
+        TaskDialog.show(frame, "Aufgabe hinzufügen")
+                .ifPresent(input -> addToSelection(new Task(input.name(), input.dueDate())));
     }
 
     private void addProject() {
-        // TODO: Hier Logik für Projekte hinzufügen (Kompositum).
+        TaskDialog.show(frame, "Projekt-Liste hinzufügen")
+                .ifPresent(input -> addToSelection(new TodoList(input.name())));
+    }
+
+    /**
+     * Hängt den neuen Eintrag an die ausgewählte Liste an: ist ein Projekt ausgewählt,
+     * landet er dort; ist eine Aufgabe ausgewählt, in deren Liste; ohne Auswahl in der
+     * obersten Liste. Welche Liste das ist, weiß die {@link Row} - siehe {@link RowBuilder}.
+     */
+    private void addToSelection(TodoListComponent newChild) {
+        TodoListComponent target = selectedRow()
+                .filter(Row::canAdd)
+                .map(Row::target)
+                .orElse(todoList);
+        target.addChild(newChild);
+
+        int selectedViewRow = table.getSelectedRow();
+        model.refresh();
+        if (selectedViewRow >= 0) {
+            // Der neue Eintrag erscheint immer unterhalb - die Auswahl bleibt gültig.
+            table.setRowSelectionInterval(selectedViewRow, selectedViewRow);
+        }
     }
 
     /**

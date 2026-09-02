@@ -4,6 +4,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 import java.awt.Component;
 import java.awt.GridLayout;
 import java.time.LocalDate;
@@ -35,6 +37,8 @@ public final class TaskDialog {
         form.add(new JLabel("Fällig am (" + Dates.PATTERN + "):"));
         form.add(dueDateField);
 
+        focusOnOpen(nameField);
+
         while (true) {
             int choice = JOptionPane.showConfirmDialog(
                     parent, form, title, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
@@ -56,6 +60,28 @@ public final class TaskDialog {
 
             return Optional.of(new Input(name, dueDate.get()));
         }
+    }
+
+    /**
+     * Setzt den Eingabefokus auf das Feld, sobald der Dialog erscheint - sonst liegt er
+     * auf dem OK-Button und die ersten Tastendrücke landen im Nichts.
+     */
+    private static void focusOnOpen(JTextField field) {
+        field.addAncestorListener(new AncestorListener() {
+            @Override
+            public void ancestorAdded(AncestorEvent event) {
+                field.requestFocusInWindow();
+                field.selectAll();
+            }
+
+            @Override
+            public void ancestorRemoved(AncestorEvent event) {
+            }
+
+            @Override
+            public void ancestorMoved(AncestorEvent event) {
+            }
+        });
     }
 
     private static void showError(Component parent, String message) {
