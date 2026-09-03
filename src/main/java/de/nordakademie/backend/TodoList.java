@@ -51,7 +51,7 @@ public class TodoList implements TodoListComponent {
                 .filter(child -> !child.isChecked())
                 .map(TodoListComponent::getDueDate)
                 .filter(Objects::nonNull)
-                .min(LocalDate::compareTo)
+                .max(LocalDate::compareTo)
                 .orElse(null);
     }
 
