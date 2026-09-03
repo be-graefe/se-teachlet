@@ -6,22 +6,34 @@ import java.util.List;
 /**
  * Component des Kompositum Designpatterns - gemeinsame Schnittstelle von Task (Blatt)
  * und TodoList (Kompositum). Die Oberfläche arbeitet ausschließlich mit diesem Typ.
+ * 
+ * Transparente Variante gewählt -> alle Methoden im gemeinsamen Interface
+ * 
+ * @author Flavio Prösch
  */
 public interface TodoListComponent {
 
+    /** Gibt den Namen des Objektes zurück */
     String getName();
     
+    /** Gibt die Kinder des Objektes zurück */
     List<TodoListComponent> getChildren();
 
-    boolean isProjekt();
+    /** Rückgabe, ob es ein Projekt (true) ist */
+    boolean isProject();
 
-    LocalDate getFaelligkeitsdatum();
+    /** Gibt das Fälligkeitsdatum zurück */
+    LocalDate getDueDate();
 
-    boolean isErledigt();
+    /** Gibt an, ob das Objekt erledigt ist */
+    boolean isChecked();
 
-    void setErledigt(boolean erledigt);
+    /** Setzt das Objekt auf erledigt / nicht erledigt */
+    void setChecked(boolean checked);
 
+    /** Fügt dem Objekt ein Kind hinzu */
     void addChild(TodoListComponent child);
 
+    /** Entfernt ein Kind vom Objekt */
     void removeChild(TodoListComponent child);
 }

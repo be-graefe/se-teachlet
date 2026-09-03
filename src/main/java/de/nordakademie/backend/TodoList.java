@@ -7,6 +7,8 @@ import java.util.Objects;
 
 /**
  * TodoList - Kompositum des Kompositum Designpatterns
+ * 
+ * @author Flavio Prösch
  */
 public class TodoList implements TodoListComponent {
     private final List<TodoListComponent> children;
@@ -44,10 +46,10 @@ public class TodoList implements TodoListComponent {
      * @return {@code null}, wenn das Projekt keinen offenen Eintrag mit Frist enthält
      */
     @Override
-    public LocalDate getFaelligkeitsdatum() {
+    public LocalDate getDueDate() {
         return children.stream()
-                .filter(child -> !child.isErledigt())
-                .map(TodoListComponent::getFaelligkeitsdatum)
+                .filter(child -> !child.isChecked())
+                .map(TodoListComponent::getDueDate)
                 .filter(Objects::nonNull)
                 .min(LocalDate::compareTo)
                 .orElse(null);
@@ -55,19 +57,19 @@ public class TodoList implements TodoListComponent {
 
     /** Ein Projekt ist erledigt, wenn es Einträge enthält und diese alle erledigt sind. */
     @Override
-    public boolean isErledigt() {
+    public boolean isChecked() {
         return !children.isEmpty()
-                && children.stream().allMatch(TodoListComponent::isErledigt);
+                && children.stream().allMatch(TodoListComponent::isChecked);
     }
 
     /** Hakt alle enthaltenen Einträge mit ab - rekursiv bis in die Unterprojekte. */
     @Override
-    public void setErledigt(boolean erledigt) {
-        children.forEach(child -> child.setErledigt(erledigt));
+    public void setChecked(boolean erledigt) {
+        children.forEach(child -> child.setChecked(erledigt));
     }
 
     @Override
-    public boolean isProjekt() {
+    public boolean isProject() {
         return true;
     }
 }

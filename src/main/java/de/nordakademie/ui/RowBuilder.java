@@ -39,13 +39,13 @@ public final class RowBuilder {
 
         // Ziel für neue Einträge: ein Projekt nimmt sie selbst auf, eine Aufgabe
         // reicht an ihre Liste weiter (siehe letztes Argument der Fabrikmethoden).
-        if (component.isProjekt()) {
+        if (component.isProject()) {
             return Row.forList(
                     depth,
                     component.getName(),
-                    component.getFaelligkeitsdatum(),
-                    component.isErledigt(),
-                    component::setErledigt,
+                    component.getDueDate(),
+                    component.isChecked(),
+                    component::setChecked,
                     onDelete,
                     component
             );
@@ -54,9 +54,9 @@ public final class RowBuilder {
         return Row.forTask(
                 depth,
                 component.getName(),
-                component.getFaelligkeitsdatum(),
-                component.isErledigt(),
-                component::setErledigt,
+                component.getDueDate(),
+                component.isChecked(),
+                component::setChecked,
                 onDelete,
                 parent
         );

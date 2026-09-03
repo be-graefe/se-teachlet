@@ -43,7 +43,7 @@ class TodoListTest {
     void todoListShouldBeProjekt() {
         TodoList todoList = new TodoList("Test");
 
-        assertTrue(todoList.isProjekt());
+        assertTrue(todoList.isProject());
     }
 
     @Test

@@ -26,7 +26,7 @@ import java.util.Optional;
 /**
  * Fenster der Anwendung: eine Tabelle mit allen Zeilen und darunter die Schaltflächen.
  *
- * @author bgraefe, fproesch
+ * @author Bennet Graefe, Flavio Prösch
  */
 public class UI {
 
