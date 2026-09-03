@@ -8,11 +8,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class ProjektTest {
+class ProjectTest {
 
     @Test
     void todoListShouldAddTasks() {
-        Projekt todoList = new Projekt("Test");
+        Project todoList = new Project("Test");
         Task task = new Task("Buy milk", LocalDate.now().plusDays(2));
 
         todoList.addChild(task);
@@ -23,7 +23,7 @@ class ProjektTest {
 
     @Test
     void todoListShouldRemoveTasks() {
-        Projekt todoList = new Projekt("Test");
+        Project todoList = new Project("Test");
         Task task = new Task("Call mom", LocalDate.now().plusDays(5));
         todoList.addChild(task);
 
@@ -34,21 +34,21 @@ class ProjektTest {
 
     @Test
     void todoListShouldStoreName() {
-        Projekt todoList = new Projekt("Haushalt");
+        Project todoList = new Project("Haushalt");
 
         assertEquals("Haushalt", todoList.getName());
     }
 
     @Test
     void todoListShouldBeProjekt() {
-        Projekt todoList = new Projekt("Test");
+        Project todoList = new Project("Test");
 
         assertTrue(todoList.isProject());
     }
 
     @Test
     void todoListShouldKeepAddedTasksInOrderOfInsertion() {
-        Projekt todoList = new Projekt("Test");
+        Project todoList = new Project("Test");
         Task first = new Task("First", LocalDate.now().plusDays(1));
         Task second = new Task("Second", LocalDate.now().plusDays(2));
 

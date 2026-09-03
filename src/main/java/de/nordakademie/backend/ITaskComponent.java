@@ -11,13 +11,13 @@ import java.util.List;
  * 
  * @author Flavio Prösch
  */
-public interface ITodoList {
+public interface ITaskComponent {
 
     /** Gibt den Namen des Objektes zurück */
     String getName();
     
     /** Gibt die Kinder des Objektes zurück */
-    List<ITodoList> getChildren();
+    List<ITaskComponent> getChildren();
 
     /** Rückgabe, ob es ein Projekt (true) ist */
     boolean isProject();
@@ -32,8 +32,8 @@ public interface ITodoList {
     void setChecked(boolean checked);
 
     /** Fügt dem Objekt ein Kind hinzu */
-    void addChild(ITodoList child);
+    void addChild(ITaskComponent child);
 
     /** Entfernt ein Kind vom Objekt */
-    void removeChild(ITodoList child);
+    void removeChild(ITaskComponent child);
 }
