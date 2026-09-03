@@ -1,6 +1,6 @@
 package de.nordakademie.ui;
 
-import de.nordakademie.backend.ITaskComponent;
+import de.nordakademie.backend.TaskItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,22 +15,22 @@ public final class RowBuilder {
     private RowBuilder() {
     }
 
-    public static List<Row> build(ITaskComponent root) {
+    public static List<Row> build(TaskItem root) {
         List<Row> rows = new ArrayList<>();
         append(rows, root, null, 0);
         return rows;
     }
 
     /** Fügt die Zeile der Komponente hinzu und steigt anschließend in ihre Einträge ab. */
-    private static void append(List<Row> rows, ITaskComponent component, ITaskComponent parent, int depth) {
+    private static void append(List<Row> rows, TaskItem component, TaskItem parent, int depth) {
         rows.add(toRow(component, parent, depth));
 
-        for (ITaskComponent child : component.getChildren()) {
+        for (TaskItem child : component.getChildren()) {
             append(rows, child, component, depth + 1);
         }
     }
 
-    private static Row toRow(ITaskComponent component, ITaskComponent parent, int depth) {
+    private static Row toRow(TaskItem component, TaskItem parent, int depth) {
         // Die Wurzel hat keinen Vater und ist deshalb nicht löschbar
         Runnable onDelete = parent == null ? null : () -> parent.removeChild(component);
 

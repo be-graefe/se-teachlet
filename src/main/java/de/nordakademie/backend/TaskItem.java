@@ -11,13 +11,13 @@ import java.util.List;
  * 
  * @author Flavio Prösch
  */
-public interface ITaskComponent {
+public interface TaskItem {
 
     /** Gibt den Namen des Objektes zurück */
     String getName();
     
     /** Gibt die Kinder des Objektes zurück */
-    List<ITaskComponent> getChildren();
+    List<TaskItem> getChildren();
 
     /** Rückgabe, ob es ein Projekt (true) ist */
     boolean isProject();
@@ -32,8 +32,8 @@ public interface ITaskComponent {
     void setChecked(boolean checked);
 
     /** Fügt dem Objekt ein Kind hinzu */
-    void addChild(ITaskComponent child);
+    void addChild(TaskItem child);
 
     /** Entfernt ein Kind vom Objekt */
-    void removeChild(ITaskComponent child);
+    void removeChild(TaskItem child);
 }

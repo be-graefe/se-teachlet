@@ -10,8 +10,8 @@ import java.util.Objects;
  * 
  * @author Flavio Prösch
  */
-public class Project implements ITaskComponent {
-    private final List<ITaskComponent> children;
+public class Project implements TaskItem {
+    private final List<TaskItem> children;
     private final String name;
 
     public Project(String name) {
@@ -25,17 +25,17 @@ public class Project implements ITaskComponent {
     }
 
     @Override
-    public void addChild(ITaskComponent task) {
+    public void addChild(TaskItem task) {
         children.add(task);
     }
 
     @Override
-    public void removeChild(ITaskComponent task) {
+    public void removeChild(TaskItem task) {
         children.remove(task);
     }
 
     @Override
-    public List<ITaskComponent> getChildren() {
+    public List<TaskItem> getChildren() {
         return children;
     }
 
@@ -49,7 +49,7 @@ public class Project implements ITaskComponent {
     public LocalDate getDueDate() {
         return children.stream()
                 .filter(child -> !child.isChecked())
-                .map(ITaskComponent::getDueDate)
+                .map(TaskItem::getDueDate)
                 .filter(Objects::nonNull)
                 .max(LocalDate::compareTo)
                 .orElse(null);
@@ -59,7 +59,7 @@ public class Project implements ITaskComponent {
     @Override
     public boolean isChecked() {
         return !children.isEmpty()
-                && children.stream().allMatch(ITaskComponent::isChecked);
+                && children.stream().allMatch(TaskItem::isChecked);
     }
 
     /** Hakt alle enthaltenen Einträge mit ab -> rekursiv bis in die Unterprojekte. */

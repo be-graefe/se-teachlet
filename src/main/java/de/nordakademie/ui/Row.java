@@ -1,6 +1,6 @@
 package de.nordakademie.ui;
 
-import de.nordakademie.backend.ITaskComponent;
+import de.nordakademie.backend.TaskItem;
 
 import java.time.LocalDate;
 import java.util.function.Consumer;
@@ -26,18 +26,18 @@ public record Row(
         Boolean done,
         Consumer<Boolean> onDone,
         Runnable onDelete,
-        ITaskComponent target
+        TaskItem target
 ) {
 
     /** Kopfzeile einer Liste / eines Projekts. */
     public static Row forList(int depth, String name, LocalDate dueDate, Boolean done,
-                              Consumer<Boolean> onDone, Runnable onDelete, ITaskComponent target) {
+                              Consumer<Boolean> onDone, Runnable onDelete, TaskItem target) {
         return new Row(depth, true, name, dueDate, done, onDone, onDelete, target);
     }
 
     /** Zeile einer einzelnen Aufgabe. */
     public static Row forTask(int depth, String name, LocalDate dueDate, boolean done,
-                              Consumer<Boolean> onDone, Runnable onDelete, ITaskComponent target) {
+                              Consumer<Boolean> onDone, Runnable onDelete, TaskItem target) {
         return new Row(depth, false, name, dueDate, done, onDone, onDelete, target);
     }
 

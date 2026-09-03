@@ -2,7 +2,7 @@ package de.nordakademie.ui;
 
 import de.nordakademie.backend.Task;
 import de.nordakademie.backend.Project;
-import de.nordakademie.backend.ITaskComponent;
+import de.nordakademie.backend.TaskItem;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
@@ -118,8 +118,8 @@ public class UI {
      * landet er dort; ist eine Aufgabe ausgewählt, in deren Liste; ohne Auswahl in der
      * obersten Liste. 
      */
-    private void addToSelection(ITaskComponent newChild) {
-        ITaskComponent target = selectedRow()
+    private void addToSelection(TaskItem newChild) {
+        TaskItem target = selectedRow()
                 .filter(Row::canAdd)
                 .map(Row::target)
                 .orElse(todoList);

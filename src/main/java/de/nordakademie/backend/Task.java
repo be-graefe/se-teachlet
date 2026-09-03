@@ -8,7 +8,7 @@ import java.util.List;
  * 
  * @author Flavio Prösch
  */
-public class Task implements ITaskComponent {
+public class Task implements TaskItem {
     private final String name;
     private final LocalDate dueDate;
     private boolean checked;
@@ -39,7 +39,7 @@ public class Task implements ITaskComponent {
     }
 
     @Override
-    public List<ITaskComponent> getChildren() {
+    public List<TaskItem> getChildren() {
         return List.of();
     }
 
@@ -48,7 +48,7 @@ public class Task implements ITaskComponent {
      * @throws UnsupportedOperationException 
      */
     @Override
-    public void addChild(ITaskComponent child) {
+    public void addChild(TaskItem child) {
         throw new UnsupportedOperationException("Eine Aufgabe kann keine Einträge enthalten.");
     }
 
@@ -57,7 +57,7 @@ public class Task implements ITaskComponent {
      * @throws UnsupportedOperationException 
      */
     @Override
-    public void removeChild(ITaskComponent child) {
+    public void removeChild(TaskItem child) {
         throw new UnsupportedOperationException("Eine Aufgabe kann keine Einträge enthalten.");
     }
 
