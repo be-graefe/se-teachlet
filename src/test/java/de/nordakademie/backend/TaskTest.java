@@ -100,7 +100,7 @@ class TaskTest {
         void testGetChildrenIsAlwaysEmpty_positive() {
             Task task = new Task("Aufgabe", LocalDate.now());
 
-            List<ITodoList> children = task.getChildren();
+            List<TaskItem> children = task.getChildren();
 
             assertTrue(children.isEmpty());
         }

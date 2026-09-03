@@ -8,7 +8,7 @@
 
 **BACKEND**
 
-- neue Schnittstelle "ITodoList" als gemeinsamer Typ von Projekt und Task
+- neue Schnittstelle "ITaskComponent" als gemeinsamer Typ von Projekt und Task
 - alle Methoden vom Task und Projekt ins Interface gepackt
 - absichtlich auch addChild / removeChild im Interface, um die transparente Variante darzustellen
 - Task und Projekt vom Interface implementieren lassen und Methoden angepasst
@@ -16,7 +16,7 @@
 **FRONTEND**
 
 - nur Klasse RowBuilder kennt das Backend -> hier Anpassungen vollzogen
-- Methoden arbeiten ausschließlich mit `IToDoList` 
+- Methoden arbeiten ausschließlich mit `ITaskComponent` 
 - Unterprojekte werden durch rekursive Einrückung dargestellt
 - neue Elemente werden danach hinzugefügt, welches Objekt ausgewählt ist.
 - Farben nach Zustand: erledigt (grün), heute fällig oder frist vorbei (rot), morgen fällig (gelb) -> greift durch die rekursive Frist auch bei Projekten
@@ -28,7 +28,7 @@
   - Vorteil: die Oberfläche kommt ohne Typprüfungen aus und kennt keine konkrete Backend-Klasse
   - Nachteil: `Task` muss beide Methoden implementieren und wirft dort eine Ausnahme
 - Alternative wäre die Sicherheitsvariante 
-- **`isProjekt()` statt `instanceof`**: die Oberfläche fragt nach der Rolle, nicht nach der Klasse, dadurch kann die Anwendung ohne Probleme mit weiteren Kompositums erweitert werden
+- **`isProject()` statt `instanceof`**: die Oberfläche fragt nach der Rolle, nicht nach der Klasse, dadurch kann die Anwendung ohne Probleme mit weiteren Kompositums erweitert werden
 
 # Offen / Designentscheidung
 

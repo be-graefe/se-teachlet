@@ -1,20 +1,12 @@
 package de.nordakademie.ui;
 
-import de.nordakademie.backend.ITodoList;
+import de.nordakademie.backend.TaskItem;
 
 import java.time.LocalDate;
 import java.util.function.Consumer;
 
 /**
  * Eine einzelne Zeile der Anzeige.
- *
- * <p>Die Zeile kennt keine konkrete Backend-Klasse: sie enthält nur die anzuzeigenden
- * Werte und - falls erlaubt - die Aktionen "abhaken", "löschen" und das Ziel für neue
- * Einträge. Tabelle, Spalten und Renderer arbeiten ausschließlich mit dieser Zeile und
- * müssen deshalb nicht angepasst werden, wenn sich die Struktur im Backend ändert.</p>
- *
- * <p>Erweiterung um ein weiteres Feld (z. B. Bearbeitungszeit): hier eine Komponente
- * ergänzen, sie in {@link RowBuilder} füllen und in {@link Column} als Spalte anzeigen.</p>
  *
  * @param depth     Einrückungstiefe (0 = oberste Ebene)
  * @param group     {@code true} für die Kopfzeile einer Liste / eines Projekts
@@ -34,18 +26,18 @@ public record Row(
         Boolean done,
         Consumer<Boolean> onDone,
         Runnable onDelete,
-        ITodoList target
+        TaskItem target
 ) {
 
     /** Kopfzeile einer Liste / eines Projekts. */
     public static Row forList(int depth, String name, LocalDate dueDate, Boolean done,
-                              Consumer<Boolean> onDone, Runnable onDelete, ITodoList target) {
+                              Consumer<Boolean> onDone, Runnable onDelete, TaskItem target) {
         return new Row(depth, true, name, dueDate, done, onDone, onDelete, target);
     }
 
     /** Zeile einer einzelnen Aufgabe. */
     public static Row forTask(int depth, String name, LocalDate dueDate, boolean done,
-                              Consumer<Boolean> onDone, Runnable onDelete, ITodoList target) {
+                              Consumer<Boolean> onDone, Runnable onDelete, TaskItem target) {
         return new Row(depth, false, name, dueDate, done, onDone, onDelete, target);
     }
 

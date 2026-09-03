@@ -1,8 +1,8 @@
 package de.nordakademie.ui;
 
 import de.nordakademie.backend.Task;
-import de.nordakademie.backend.Projekt;
-import de.nordakademie.backend.ITodoList;
+import de.nordakademie.backend.Project;
+import de.nordakademie.backend.TaskItem;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
@@ -33,12 +33,12 @@ public class UI {
 
     private static boolean fontsScaled;
 
-    private final Projekt todoList;
+    private final Project todoList;
     private final TodoTableModel model;
     private final JTable table;
     private final JFrame frame;
 
-    public UI(Projekt todoList) {
+    public UI(Project todoList) {
         scaleFonts();
         this.todoList = todoList;
         this.model = new TodoTableModel(() -> RowBuilder.build(todoList));
@@ -110,7 +110,7 @@ public class UI {
 
     private void addProject() {
         TaskDialog.show(frame, "Projekt-Liste hinzufügen")
-                .ifPresent(input -> addToSelection(new Projekt(input.name())));
+                .ifPresent(input -> addToSelection(new Project(input.name())));
     }
 
     /**
@@ -118,8 +118,8 @@ public class UI {
      * landet er dort; ist eine Aufgabe ausgewählt, in deren Liste; ohne Auswahl in der
      * obersten Liste. 
      */
-    private void addToSelection(ITodoList newChild) {
-        ITodoList target = selectedRow()
+    private void addToSelection(TaskItem newChild) {
+        TaskItem target = selectedRow()
                 .filter(Row::canAdd)
                 .map(Row::target)
                 .orElse(todoList);
