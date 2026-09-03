@@ -74,10 +74,6 @@ public class TodoTableModel extends AbstractTableModel {
 
     /**
      * Übernimmt eine Änderung (z. B. das Abhaken) und liest die Zeilen anschließend neu.
-     *
-     * <p>Eine {@link Row} ist eine Momentaufnahme des Backends. Nach jeder Änderung wird
-     * deshalb komplett neu aufgebaut - dadurch sieht man sofort auch Auswirkungen auf
-     * andere Zeilen, etwa wenn später ein abgehaktes Projekt seine Aufgaben mit abhakt.</p>
      */
     @Override
     public void setValueAt(Object value, int rowIndex, int columnIndex) {

@@ -13,9 +13,6 @@ import java.util.Optional;
 
 /**
  * Eingabedialog für eine neue Aufgabe.
- *
- * <p>Ein zusätzliches Eingabefeld (z. B. Bearbeitungszeit) ist eine weitere Zeile im
- * Formular und eine weitere Komponente in {@link Input}.</p>
  */
 public final class TaskDialog {
 

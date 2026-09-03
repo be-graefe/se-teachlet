@@ -5,13 +5,6 @@ import java.util.function.Function;
 /**
  * Die Spalten der Tabelle.
  *
- * <p>Jede Spalte weiß selbst, wie sie ihren Wert aus einer {@link Row} liest.
- * Eine zusätzliche Spalte (z. B. "Bearbeitungszeit") ist damit genau eine weitere
- * Konstante an dieser Stelle - Tabellenmodell und Renderer bleiben unverändert:</p>
- *
- * <pre>{@code
- * BEARBEITUNGSZEIT("Bearbeitungszeit", String.class, 160, row -> row.bearbeitungszeit() + " min"),
- * }</pre>
  */
 public enum Column {
 

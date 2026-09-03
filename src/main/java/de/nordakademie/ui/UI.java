@@ -116,7 +116,7 @@ public class UI {
     /**
      * Hängt den neuen Eintrag an die ausgewählte Liste an: ist ein Projekt ausgewählt,
      * landet er dort; ist eine Aufgabe ausgewählt, in deren Liste; ohne Auswahl in der
-     * obersten Liste. Welche Liste das ist, weiß die {@link Row} - siehe {@link RowBuilder}.
+     * obersten Liste. 
      */
     private void addToSelection(ITodoList newChild) {
         ITodoList target = selectedRow()

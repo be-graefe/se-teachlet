@@ -7,11 +7,8 @@ import java.util.List;
 
 /**
  * Übersetzt das Backend in die flache Zeilenliste der Anzeige.
- *
- * <p>Dies ist die einzige Klasse der Oberfläche, die {@link ITodoList} kennt.
- * Sie steigt rekursiv durch das Kompositum und fragt jede Komponente nach denselben
- * Werten - ob dahinter eine einzelne Aufgabe oder ein Projekt mit Unterprojekten steckt,
- * entscheidet das Backend.</p>
+ * 
+ * @author Flavio Prösch
  */
 public final class RowBuilder {
 
@@ -34,11 +31,11 @@ public final class RowBuilder {
     }
 
     private static Row toRow(ITodoList component, ITodoList parent, int depth) {
-        // Die Wurzel hat keinen Vater und ist deshalb nicht löschbar.
+        // Die Wurzel hat keinen Vater und ist deshalb nicht löschbar
         Runnable onDelete = parent == null ? null : () -> parent.removeChild(component);
 
         // Ziel für neue Einträge: ein Projekt nimmt sie selbst auf, eine Aufgabe
-        // reicht an ihre Liste weiter (siehe letztes Argument der Fabrikmethoden).
+        // reicht an ihre Liste weiter
         if (component.isProject()) {
             return Row.forList(
                     depth,
