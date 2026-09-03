@@ -34,16 +34,23 @@ public class Project implements TaskItem {
         children.remove(task);
     }
 
+    /** 
+     * Gibt die Kinder des Objektes zurück 
+     * 
+     * @author Flavio Prösch, Reviewanforderungen von Lennart Hell
+     */
     @Override
     public List<TaskItem> getChildren() {
-        return children;
+        return List.copyOf(children);
     }
 
     /**
-     * Die Frist eines Projekts ist die früheste Frist seiner offenen Einträge.
-     * Erledigte Einträge zählen dann nicht mehr mit.
+     * Die Frist eines Projekts ist die späteste Frist seiner offenen Einträge.
+     * Erledigte Einträge zählen dabei nicht mehr mit.
      *
      * @return {@code null}, wenn das Projekt keinen offenen Eintrag mit Frist enthält
+     * 
+     * @author Flavio Prösch, Reviewanforderungen von Lennart Hell
      */
     @Override
     public LocalDate getDueDate() {
