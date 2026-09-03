@@ -6,15 +6,15 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * TodoList - Kompositum des Kompositum Designpatterns
+ * Projekt - Kompositum des Kompositum Designpatterns
  * 
  * @author Flavio Prösch
  */
-public class TodoList implements TodoListComponent {
-    private final List<TodoListComponent> children;
+public class Projekt implements ITodoList {
+    private final List<ITodoList> children;
     private final String name;
 
-    public TodoList(String name) {
+    public Projekt(String name) {
         this.children = new ArrayList<>();
         this.name = name;
     }
@@ -25,17 +25,17 @@ public class TodoList implements TodoListComponent {
     }
 
     @Override
-    public void addChild(TodoListComponent task) {
+    public void addChild(ITodoList task) {
         children.add(task);
     }
 
     @Override
-    public void removeChild(TodoListComponent task) {
+    public void removeChild(ITodoList task) {
         children.remove(task);
     }
 
     @Override
-    public List<TodoListComponent> getChildren() {
+    public List<ITodoList> getChildren() {
         return children;
     }
 
@@ -49,7 +49,7 @@ public class TodoList implements TodoListComponent {
     public LocalDate getDueDate() {
         return children.stream()
                 .filter(child -> !child.isChecked())
-                .map(TodoListComponent::getDueDate)
+                .map(ITodoList::getDueDate)
                 .filter(Objects::nonNull)
                 .max(LocalDate::compareTo)
                 .orElse(null);
@@ -59,7 +59,7 @@ public class TodoList implements TodoListComponent {
     @Override
     public boolean isChecked() {
         return !children.isEmpty()
-                && children.stream().allMatch(TodoListComponent::isChecked);
+                && children.stream().allMatch(ITodoList::isChecked);
     }
 
     /** Hakt alle enthaltenen Einträge mit ab - rekursiv bis in die Unterprojekte. */

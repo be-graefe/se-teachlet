@@ -1,6 +1,6 @@
 package de.nordakademie.ui;
 
-import de.nordakademie.backend.TodoListComponent;
+import de.nordakademie.backend.ITodoList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Übersetzt das Backend in die flache Zeilenliste der Anzeige.
  *
- * <p>Dies ist die einzige Klasse der Oberfläche, die {@link TodoListComponent} kennt.
+ * <p>Dies ist die einzige Klasse der Oberfläche, die {@link ITodoList} kennt.
  * Sie steigt rekursiv durch das Kompositum und fragt jede Komponente nach denselben
  * Werten - ob dahinter eine einzelne Aufgabe oder ein Projekt mit Unterprojekten steckt,
  * entscheidet das Backend.</p>
@@ -18,22 +18,22 @@ public final class RowBuilder {
     private RowBuilder() {
     }
 
-    public static List<Row> build(TodoListComponent root) {
+    public static List<Row> build(ITodoList root) {
         List<Row> rows = new ArrayList<>();
         append(rows, root, null, 0);
         return rows;
     }
 
     /** Fügt die Zeile der Komponente hinzu und steigt anschließend in ihre Einträge ab. */
-    private static void append(List<Row> rows, TodoListComponent component, TodoListComponent parent, int depth) {
+    private static void append(List<Row> rows, ITodoList component, ITodoList parent, int depth) {
         rows.add(toRow(component, parent, depth));
 
-        for (TodoListComponent child : component.getChildren()) {
+        for (ITodoList child : component.getChildren()) {
             append(rows, child, component, depth + 1);
         }
     }
 
-    private static Row toRow(TodoListComponent component, TodoListComponent parent, int depth) {
+    private static Row toRow(ITodoList component, ITodoList parent, int depth) {
         // Die Wurzel hat keinen Vater und ist deshalb nicht löschbar.
         Runnable onDelete = parent == null ? null : () -> parent.removeChild(component);
 

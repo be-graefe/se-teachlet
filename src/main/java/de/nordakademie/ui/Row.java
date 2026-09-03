@@ -1,6 +1,6 @@
 package de.nordakademie.ui;
 
-import de.nordakademie.backend.TodoListComponent;
+import de.nordakademie.backend.ITodoList;
 
 import java.time.LocalDate;
 import java.util.function.Consumer;
@@ -34,18 +34,18 @@ public record Row(
         Boolean done,
         Consumer<Boolean> onDone,
         Runnable onDelete,
-        TodoListComponent target
+        ITodoList target
 ) {
 
     /** Kopfzeile einer Liste / eines Projekts. */
     public static Row forList(int depth, String name, LocalDate dueDate, Boolean done,
-                              Consumer<Boolean> onDone, Runnable onDelete, TodoListComponent target) {
+                              Consumer<Boolean> onDone, Runnable onDelete, ITodoList target) {
         return new Row(depth, true, name, dueDate, done, onDone, onDelete, target);
     }
 
     /** Zeile einer einzelnen Aufgabe. */
     public static Row forTask(int depth, String name, LocalDate dueDate, boolean done,
-                              Consumer<Boolean> onDone, Runnable onDelete, TodoListComponent target) {
+                              Consumer<Boolean> onDone, Runnable onDelete, ITodoList target) {
         return new Row(depth, false, name, dueDate, done, onDone, onDelete, target);
     }
 

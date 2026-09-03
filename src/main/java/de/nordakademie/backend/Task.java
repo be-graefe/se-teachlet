@@ -8,7 +8,7 @@ import java.util.List;
  * 
  * @author Flavio Prösch
  */
-public class Task implements TodoListComponent {
+public class Task implements ITodoList {
     private final String name;
     private final LocalDate dueDate;
     private boolean checked;
@@ -39,7 +39,7 @@ public class Task implements TodoListComponent {
     }
 
     @Override
-    public List<TodoListComponent> getChildren() {
+    public List<ITodoList> getChildren() {
         return List.of();
     }
 
@@ -48,7 +48,7 @@ public class Task implements TodoListComponent {
      * @throws UnsupportedOperationException 
      */
     @Override
-    public void addChild(TodoListComponent child) {
+    public void addChild(ITodoList child) {
         throw new UnsupportedOperationException("Eine Aufgabe kann keine Einträge enthalten.");
     }
 
@@ -57,7 +57,7 @@ public class Task implements TodoListComponent {
      * @throws UnsupportedOperationException 
      */
     @Override
-    public void removeChild(TodoListComponent child) {
+    public void removeChild(ITodoList child) {
         throw new UnsupportedOperationException("Eine Aufgabe kann keine Einträge enthalten.");
     }
 
