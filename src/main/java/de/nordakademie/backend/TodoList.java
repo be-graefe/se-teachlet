@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TodoList - Component des Kompositum Designpatterns
+ * TodoList, enthält mehrere Tasks
+ * 
+ * @author Bennett Graefe
  */
 public class TodoList {
     private final List<Task> tasks;
@@ -29,10 +31,6 @@ public class TodoList {
 
     public List<Task> getTasks() {
         return tasks;
-    }
-
-    public boolean isProjekt() {
-        return true;
     }
 
 }

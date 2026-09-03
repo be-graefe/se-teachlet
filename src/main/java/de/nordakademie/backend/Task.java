@@ -2,37 +2,35 @@ package de.nordakademie.backend;
 
 import java.time.LocalDate;
 
-import static java.time.temporal.ChronoUnit.DAYS;
-
+/**
+ * Task Klasse, enthält Name und Fälligkeitsdatum der Tasks
+ * 
+ * @author Bennett Graefe
+ */
 public class Task {
     private final String name;
-    private final LocalDate faelligkeitsdatum;
-    private boolean erledigt;
+    private final LocalDate dueDate;
+    private boolean checked;
 
     public Task(String name, LocalDate dueDate) {
         this.name = name;
-        this.faelligkeitsdatum = dueDate;
-    }
-
-    public long berechneTageBisFaelligkeitsdatum() {
-        LocalDate today = LocalDate.now();
-        return DAYS.between(today, faelligkeitsdatum);
+        this.dueDate = dueDate;
     }
 
     public String getName() {
         return name;
     }
 
-    public LocalDate getFaelligkeitsdatum() {
-        return faelligkeitsdatum;
+    public LocalDate getDueDate() {
+        return dueDate;
     }
 
-    public boolean isErledigt() {
-        return erledigt;
+    public boolean isChecked() {
+        return checked;
     }
 
-    public void setErledigt(boolean erledigt) {
-        this.erledigt = erledigt;
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 
 }

@@ -15,9 +15,6 @@ import java.time.temporal.ChronoUnit;
 
 /**
  * Darstellung einer Zeile: Einrückung nach Tiefe und Hintergrundfarbe nach Zustand.
- *
- * <p>Die Renderer entscheiden allein anhand der {@link Row} - ob diese aus einer Aufgabe,
- * einer Liste oder später aus einem Kompositum stammt, spielt keine Rolle.</p>
  */
 public final class RowRenderer {
 

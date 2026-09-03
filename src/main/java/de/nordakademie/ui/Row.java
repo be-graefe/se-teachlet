@@ -6,14 +6,6 @@ import java.util.function.Consumer;
 /**
  * Eine einzelne Zeile der Anzeige.
  *
- * <p>Die Zeile ist bewusst unabhängig von den Backend-Klassen: sie enthält nur die
- * anzuzeigenden Werte und - falls erlaubt - die Aktionen "abhaken" und "löschen".
- * Tabelle, Spalten und Renderer arbeiten ausschließlich mit dieser Zeile und müssen
- * deshalb nicht angepasst werden, wenn sich die Struktur im Backend ändert.</p>
- *
- * <p>Erweiterung um ein weiteres Feld (z. B. Bearbeitungszeit): hier eine Komponente
- * ergänzen, sie in {@link RowBuilder} füllen und in {@link Column} als Spalte anzeigen.</p>
- *
  * @param depth     Einrückungstiefe (0 = oberste Ebene)
  * @param group     {@code true} für die Kopfzeile einer Liste / eines Projekts
  * @param name      angezeigter Name

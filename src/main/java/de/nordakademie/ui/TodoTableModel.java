@@ -6,10 +6,6 @@ import java.util.function.Supplier;
 
 /**
  * Tabellenmodell über einer flachen Liste von {@link Row}s.
- *
- * <p>Das Modell kennt weder das Backend noch die Bedeutung einzelner Spalten - es fragt
- * die {@link Column} nach Titel, Typ und Wert. Neue Spalten oder eine tiefere Struktur
- * erfordern deshalb keine Aenderung an dieser Klasse.</p>
  */
 public class TodoTableModel extends AbstractTableModel {
 

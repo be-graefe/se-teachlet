@@ -40,13 +40,6 @@ class TodoListTest {
     }
 
     @Test
-    void todoListShouldBeProjekt() {
-        TodoList todoList = new TodoList("Test");
-
-        assertTrue(todoList.isProjekt());
-    }
-
-    @Test
     void todoListShouldKeepAddedTasksInOrderOfInsertion() {
         TodoList todoList = new TodoList("Test");
         Task first = new Task("First", LocalDate.now().plusDays(1));

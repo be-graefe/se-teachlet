@@ -8,12 +8,6 @@ import java.util.List;
 
 /**
  * Übersetzt das Backend in die flache Zeilenliste der Anzeige.
- *
- * <p>Dies ist die einzige Klasse der Oberfläche, die {@link TodoList} und {@link Task} kennt.</p>
- *
- * <p><b>Erweiterung Kompositum:</b> sobald eine Liste weitere Listen enthalten kann, wird hier
- * nur zusätzlich rekursiv abgestiegen (siehe markierte Stelle in {@code appendList}).
- * Tabelle, Spalten, Renderer und Dialoge bleiben unverändert.</p>
  */
 public final class RowBuilder {
 
@@ -32,18 +26,15 @@ public final class RowBuilder {
         for (Task task : list.getTasks()) {
             rows.add(toRow(task, list, depth + 1));
         }
-
-        // Kompositum: hier später die enthaltenen Unterlisten ergänzen, z. B.
-        // for (TodoList child : list.getChildren()) appendList(rows, child, depth + 1);
     }
 
     private static Row toRow(Task task, TodoList parent, int depth) {
         return Row.forTask(
                 depth,
                 task.getName(),
-                task.getFaelligkeitsdatum(),
-                task.isErledigt(),
-                task::setErledigt,
+                task.getDueDate(),
+                task.isChecked(),
+                task::setChecked,
                 () -> parent.removeTask(task)
         );
     }
