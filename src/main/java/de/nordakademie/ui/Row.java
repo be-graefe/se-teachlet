@@ -1,5 +1,7 @@
 package de.nordakademie.ui;
 
+import de.nordakademie.backend.TodoList;
+
 import java.time.LocalDate;
 import java.util.function.Consumer;
 
@@ -13,6 +15,8 @@ import java.util.function.Consumer;
  * @param done      Erledigt-Status, {@code null} wenn die Zeile keinen Status hat
  * @param onDone    Aktion zum Abhaken, {@code null} wenn die Zeile nicht abhakbar ist
  * @param onDelete  Aktion zum Löschen, {@code null} wenn die Zeile nicht löschbar ist
+ * @param target    Liste, in die ein neuer Eintrag gehört, wenn diese Zeile ausgewählt ist:
+ *                  bei einer Liste die Liste selbst, bei einer Aufgabe deren Liste
  */
 public record Row(
         int depth,
@@ -21,24 +25,25 @@ public record Row(
         LocalDate dueDate,
         Boolean done,
         Consumer<Boolean> onDone,
-        Runnable onDelete
+        Runnable onDelete,
+        TodoList target
 ) {
 
     /** Kopfzeile einer Liste / eines Projekts ohne eigene Aktionen. */
-    public static Row forList(int depth, String name) {
-        return forList(depth, name, null, null, null, null);
+    public static Row forList(int depth, String name, TodoList target) {
+        return forList(depth, name, null, null, null, null, target);
     }
 
     /** Kopfzeile einer Liste / eines Projekts mit Datum und Aktionen. */
     public static Row forList(int depth, String name, LocalDate dueDate, Boolean done,
-                              Consumer<Boolean> onDone, Runnable onDelete) {
-        return new Row(depth, true, name, dueDate, done, onDone, onDelete);
+                              Consumer<Boolean> onDone, Runnable onDelete, TodoList target) {
+        return new Row(depth, true, name, dueDate, done, onDone, onDelete, target);
     }
 
     /** Zeile einer einzelnen Aufgabe. */
     public static Row forTask(int depth, String name, LocalDate dueDate, boolean done,
-                              Consumer<Boolean> onDone, Runnable onDelete) {
-        return new Row(depth, false, name, dueDate, done, onDone, onDelete);
+                              Consumer<Boolean> onDone, Runnable onDelete, TodoList target) {
+        return new Row(depth, false, name, dueDate, done, onDone, onDelete, target);
     }
 
     public boolean canToggle() {
@@ -59,5 +64,9 @@ public record Row(
         if (canDelete()) {
             onDelete.run();
         }
+    }
+
+    public boolean canAdd() {
+        return target != null;
     }
 }

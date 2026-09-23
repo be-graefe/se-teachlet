@@ -21,7 +21,7 @@ public final class RowBuilder {
     }
 
     private static void appendList(List<Row> rows, TodoList list, int depth) {
-        rows.add(Row.forList(depth, list.getName()));
+        rows.add(Row.forList(depth, list.getName(), list));
 
         for (Task task : list.getTasks()) {
             rows.add(toRow(task, list, depth + 1));
@@ -35,7 +35,8 @@ public final class RowBuilder {
                 task.getDueDate(),
                 task.isChecked(),
                 task::setChecked,
-                () -> parent.removeTask(task)
+                () -> parent.removeTask(task),
+                parent
         );
     }
 }

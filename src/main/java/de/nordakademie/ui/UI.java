@@ -106,14 +106,32 @@ public class UI {
     }
 
     private void addTask() {
-        TaskDialog.show(frame, "Aufgabe hinzufügen").ifPresent(input -> {
-            todoList.addTask(new Task(input.name(), input.dueDate()));
-            model.refresh();
-        });
+        TaskDialog.show(frame, "Aufgabe hinzufügen")
+                .ifPresent(input -> addToSelection(new Task(input.name(), input.dueDate())));
     }
 
     private void addProject() {
         // TODO: Hier Logik für Projekte hinzufügen (Kompositum).
+    }
+
+    /**
+     * Hängt den neuen Eintrag an die Liste der ausgewählten Zeile an: ist eine Liste
+     * ausgewählt, landet er dort; ist eine Aufgabe ausgewählt, in deren Liste; ohne
+     * Auswahl in der obersten Liste.
+     */
+    private void addToSelection(Task newTask) {
+        TodoList target = selectedRow()
+                .filter(Row::canAdd)
+                .map(Row::target)
+                .orElse(todoList);
+        target.addTask(newTask);
+
+        int selectedViewRow = table.getSelectedRow();
+        model.refresh();
+        if (selectedViewRow >= 0) {
+            // Der neue Eintrag erscheint immer unterhalb - die Auswahl bleibt gültig.
+            table.setRowSelectionInterval(selectedViewRow, selectedViewRow);
+        }
     }
 
     /**
